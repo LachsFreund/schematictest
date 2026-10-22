@@ -191,7 +191,9 @@ class Atlas {
         if (key.startsWith('entity/')) this._put(key, img, img.width, img.height, img.width, img.height);
         else {
           const sw = img.width, sh = Math.min(img.width, img.height); // nur 1. Frame bei Animationen
-          this._put(key, img, sw, sh, this.tile, this.tile);
+          // größere Texturen (z. B. 32x32-Schilder ab 26.x) in Originalauflösung ablegen, sonst werden sie verwaschen
+          if (sw > this.tile) this._put(key, img, sw, sh, sw, sh);
+          else this._put(key, img, sw, sh, this.tile, this.tile);
         }
       })();
       this.pending.set(key, p);

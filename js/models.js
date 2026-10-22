@@ -47,8 +47,11 @@ const Models = (() => {
   }
 
   function resolveTex(ref, tex) {
+    // Seit 26.x können Texturen Objekte sein: { "sprite": "minecraft:block/glass", "force_translucent": true }
+    const unwrap = r => (r && typeof r === 'object' && typeof r.sprite === 'string') ? r.sprite : r;
     let n = 0;
-    while (typeof ref === 'string' && ref[0] === '#' && n++ < 12) ref = tex[ref.slice(1)];
+    ref = unwrap(ref);
+    while (typeof ref === 'string' && ref[0] === '#' && n++ < 12) ref = unwrap(tex[ref.slice(1)]);
     if (typeof ref !== 'string' || ref[0] === '#') return null;
     return ref.replace(/^minecraft:/, '');
   }
